@@ -6,8 +6,17 @@ class InvalidInputError(Exception):
     """input exception"""
 
 
+class GameError(Exception):
+    """invalid game state"""
+
+
 class TicTacToe:
     """game class"""
+
+    inv_args_count = "invalid move, args count != 2, try again"
+    inv_value = "invalid move, not int, try again"
+    inv_number = "invalid move, out of field, try again"
+    inv_state = "invalid move, this cell is occupied, try again"
 
     def __init__(self):
         self._empty = "_"
@@ -69,20 +78,17 @@ class TicTacToe:
         """user input validation"""
         move_str = inp.strip().split(" ")
         if len(move_str) != 2:
-            raise InvalidInputError("invalid move, too much args, try again")
+            raise InvalidInputError(self.inv_args_count)
         try:
             move = [int(x) for x in move_str]
-        except ValueError as err:
-            raise InvalidInputError(
-                "invalid move, not int, try again"
-            ) from err
+        except ValueError as ex:
+            raise InvalidInputError(self.inv_value) from ex
+
+        if any(x > 2 or x < 0 for x in move):
+            raise InvalidInputError(self.inv_number)
 
         if self.state[move[0]][move[1]] != self._empty:
-            raise InvalidInputError(
-                "invalid move, this cell is occupied, try again"
-            )
-        if any(x > 2 or x < 0 for x in move):
-            raise InvalidInputError("invalid move, out of field, try again")
+            raise InvalidInputError(self.inv_state)
 
         return move
 
@@ -108,7 +114,10 @@ class TicTacToe:
 
     def apply_move(self, move: tp.List[int]) -> None:
         """apply move"""
-        self.state[move[0]][move[1]] = self.curr_player
+        try:
+            self.state[move[0]][move[1]] = self.curr_player
+        except IndexError as ex:
+            raise GameError(f"invalid move {move}") from ex
 
     def start(self) -> None:
         """start of whole game"""
