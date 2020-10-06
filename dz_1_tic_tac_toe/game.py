@@ -108,7 +108,7 @@ class TicTacToe:
         elif self.curr_player == "O":
             self.curr_player = "X"
         else:
-            raise RuntimeError(
+            raise GameError(
                 f"invalid state current player is {self.curr_player}"
             )
 
@@ -125,6 +125,17 @@ class TicTacToe:
             print(self)
             move = self.get_current_player_move()
             self.apply_move(move)
-            self.toggle_players()
             self.check_winner()
+            self.toggle_players()
         print(f"winner is {self.winner}")
+
+
+if __name__ == "__main__":
+
+    while True:
+        tic_tac_toe = TicTacToe()
+        tic_tac_toe.start()
+        print("\n\n\nanother one? Yes?: ", end="")
+        if input() != "Yes":
+            break
+    print("bye!")

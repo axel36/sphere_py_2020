@@ -14,7 +14,7 @@ class GameTestCase(unittest.TestCase):
         """check_other_empty"""
         for i, line in enumerate(state):
             for j, elem in enumerate(line):
-                if [i, j] not in not_empty:
+                if (i, j) not in not_empty:
                     self.assertEqual(elem, "_")
 
     def test_toggle_player(self):
@@ -34,6 +34,7 @@ class GameTestCase(unittest.TestCase):
             moves.append(move)
             self.game.apply_move(list(move))
             self.assertEqual(self.game.state[move[0]][move[1]], "X")
+            self.check_other_empty(self.game.state, moves)
 
     def test_validate_move(self):
         """ validate_move func test """
