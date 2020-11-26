@@ -14,11 +14,15 @@ class LRUCache:
 
     def get(self, key: str) -> tp.Optional[str]:
         """get key"""
-        return self._storage.get(key, None)
+        if key in self._storage:
+            self._move_to_recent(key)
+            return self._storage[key]
+
+        return None
 
     def set(self, key: str, value: str) -> None:
         """set to cache"""
-        if self._storage.get(key, None) is not None:
+        if key in self._storage:
             self._storage[key] = value
             self._move_to_recent(key)
             return
@@ -31,7 +35,7 @@ class LRUCache:
 
     def delete(self, key: str) -> None:
         """delete from cache"""
-        if self._storage.get(key, None) is None:
+        if key not in self._storage:
             return
 
         self._keys.remove(key)

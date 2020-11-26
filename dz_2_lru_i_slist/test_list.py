@@ -16,11 +16,8 @@ class SuperListTestCase(unittest.TestCase):
         expected = super_list.SuperList([2, 4, 3, 4])
         self.assertEqual(self.slist1 + self.slist2, expected)
 
-        try:
+        with self.assertRaises(TypeError):
             self.slist1 + self.slist3
-            # "we can't add str to int"
-        except TypeError:
-            pass
 
     def test_sub(self):
         """sub test"""

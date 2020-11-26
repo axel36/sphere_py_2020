@@ -15,7 +15,7 @@ class SuperList(list):
 
     def __add__(self, other):
         small, big = get_small_and_big(self, other)
-        ret = copy.deepcopy(big)
+        ret = SuperList(big)
 
         for i, elem in enumerate(small):
             ret[i] = elem + ret[i]
